@@ -8,7 +8,7 @@
 
 > **"An AI platform that detects, scores, and predicts infrastructure failures — from a single photo — before they become accidents."**
 
-Built with ❤️ by **Team Cortexa** for the National Hackathon 2026.
+Built with ❤️ by **Team Cortexa** for the International Hackathon 2026.
 
 ---
 
@@ -131,4 +131,4 @@ npm run build
 
 ## 📜 License & Copyright
 
-&copy; 2026 **Team Cortexa** (Mahitha Reddy G, Ashwin M, Ragavendra M, Kanimozhi A). All rights reserved. Built for National Hackathon 2026.
+&copy; 2026 **Team Cortexa** (Mahitha Reddy G, Ashwin M, Ragavendra M, Kanimozhi A). All rights reserved. Built for International Hackathon 2026.

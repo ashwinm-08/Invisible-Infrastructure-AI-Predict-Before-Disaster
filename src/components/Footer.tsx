@@ -74,7 +74,7 @@ export const Footer: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <span>Built for <span className="text-cyan-400 font-semibold">National Hackathon 2026</span></span>
+            <span>Built for <span className="text-cyan-400 font-semibold">International Hackathon 2026</span></span>
           </div>
         </div>
 

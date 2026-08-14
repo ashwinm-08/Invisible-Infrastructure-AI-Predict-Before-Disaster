@@ -2,8 +2,10 @@ node_modules
 dist
 .vercel
 .next
+apps
 *.log
 *.mp4
 *.exe
 *.zip
+*.db
 .DS_Store
