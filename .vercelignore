@@ -1,0 +1,9 @@
+node_modules
+.git
+.next
+.vercel
+dist
+apps
+*.mp4
+*.zip
+*.tar.gz

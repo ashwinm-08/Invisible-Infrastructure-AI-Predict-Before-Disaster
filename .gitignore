@@ -1,0 +1,9 @@
+node_modules
+dist
+.vercel
+.next
+*.log
+*.mp4
+*.exe
+*.zip
+.DS_Store
