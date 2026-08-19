@@ -18,7 +18,10 @@ import {
   Download,
   Send,
   Printer,
-  X
+  X,
+  Radio,
+  Activity,
+  Layers
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
@@ -341,7 +344,7 @@ Authorized by Team Cortexa AI Platform | Municipal Corporation
       {/* Background Orbs */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-cyan-500/5 rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-10">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
@@ -350,29 +353,29 @@ Authorized by Team Cortexa AI Platform | Municipal Corporation
             <span>{t('scanner_tag')}</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
+          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
             {t('scanner_title')} <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-amber-300">
               {t('scanner_subtitle')}
             </span>
           </h2>
 
-          <p className={`${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} text-base`}>
+          <p className={`${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} text-base max-w-2xl mx-auto`}>
             {t('scanner_drop_desc')}
           </p>
         </div>
 
-        {/* Scanner Container Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Scanner Container Grid: 7 cols left, 5 cols right with explicit full-width styling */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch w-full">
           
           {/* Left Upload & Vision Viewport (7 cols) */}
-          <div className="lg:col-span-7 space-y-4">
+          <div className="lg:col-span-7 flex flex-col justify-between space-y-4 w-full min-w-0">
             <div
               onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
               onDragLeave={() => setDragActive(false)}
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
-              className={`glass-panel rounded-2xl p-6 sm:p-8 border-2 border-dashed transition-all duration-300 flex flex-col items-center justify-center text-center cursor-pointer relative overflow-hidden group min-h-[340px] ${
+              className={`glass-panel rounded-2xl p-6 sm:p-8 border-2 border-dashed transition-all duration-300 flex flex-col items-center justify-center text-center cursor-pointer relative overflow-hidden group min-h-[350px] w-full ${
                 dragActive
                   ? 'border-cyan-400 bg-cyan-500/10 scale-[1.01]'
                   : theme === 'dark'
@@ -456,16 +459,16 @@ Authorized by Team Cortexa AI Platform | Municipal Corporation
             </div>
 
             {/* Quick Demo Presets */}
-            <div className={`glass-panel rounded-xl p-4 border ${theme === 'dark' ? 'border-slate-800 bg-slate-900/60' : 'border-slate-200 bg-white'}`}>
+            <div className={`glass-panel rounded-xl p-4 border w-full ${theme === 'dark' ? 'border-slate-800 bg-slate-900/60' : 'border-slate-200 bg-white'}`}>
               <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block mb-2 font-semibold">
                 {t('scanner_preset_label')}
               </span>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 w-full">
                 {PRESET_SAMPLES.map((preset) => (
                   <button
                     key={preset.name}
                     onClick={() => handlePresetSelect(preset)}
-                    className={`p-2.5 rounded-lg border text-left transition-all group cursor-pointer ${
+                    className={`p-2.5 rounded-lg border text-left transition-all group cursor-pointer w-full ${
                       theme === 'dark'
                         ? 'bg-slate-950 hover:bg-slate-800 border-slate-800'
                         : 'bg-slate-50 hover:bg-slate-100 border-slate-200'
@@ -482,14 +485,14 @@ Authorized by Team Cortexa AI Platform | Municipal Corporation
             </div>
           </div>
 
-          {/* Right Structured Diagnostic Report Card (5 cols) */}
-          <div className={`glass-panel rounded-2xl border p-6 space-y-5 relative overflow-hidden min-h-[440px] flex flex-col justify-between ${
+          {/* Right Structured AI Command Center Diagnostic Panel (5 cols) — ALWAYS FULL WIDTH */}
+          <div className={`lg:col-span-5 glass-panel rounded-2xl border p-6 space-y-5 relative overflow-hidden min-h-[440px] flex flex-col justify-between w-full min-w-0 ${
             theme === 'dark' ? 'border-slate-800 bg-slate-900/90' : 'border-slate-200 bg-white shadow-xl'
           }`}>
             
-            {/* Scanning State */}
+            {/* Scanning Active State */}
             {isScanning && (
-              <div className="my-auto space-y-6 text-center py-8">
+              <div className="my-auto space-y-6 text-center py-8 w-full">
                 <div className="relative w-20 h-20 mx-auto">
                   <div className="absolute inset-0 rounded-full border-4 border-cyan-500/20 animate-ping" />
                   <div className="w-20 h-20 rounded-full bg-cyan-500/10 border-2 border-cyan-400 flex items-center justify-center text-cyan-300">
@@ -497,7 +500,7 @@ Authorized by Team Cortexa AI Platform | Municipal Corporation
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-2 w-full">
                   <span className="text-xs font-mono px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-bold uppercase">
                     CORTEXA-VISION INFERENCE
                   </span>
@@ -518,15 +521,15 @@ Authorized by Team Cortexa AI Platform | Municipal Corporation
               </div>
             )}
 
-            {/* Workable Structured AI Inspection Report */}
+            {/* Workable Structured AI Inspection Report Result */}
             {!isScanning && analysisResult && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="space-y-4"
+                className="space-y-4 w-full"
               >
-                {/* Clean Header Bar */}
-                <div className={`flex items-center justify-between border-b pb-3 ${theme === 'dark' ? 'border-slate-800' : 'border-slate-200'}`}>
+                {/* Header Bar */}
+                <div className={`flex items-center justify-between border-b pb-3 w-full ${theme === 'dark' ? 'border-slate-800' : 'border-slate-200'}`}>
                   <div>
                     <div className="flex items-center gap-1.5">
                       <ShieldCheck className="w-4 h-4 text-cyan-400" />
@@ -545,7 +548,7 @@ Authorized by Team Cortexa AI Platform | Municipal Corporation
                 </div>
 
                 {/* Main Defect Title Card */}
-                <div className="space-y-1">
+                <div className="space-y-1 w-full">
                   <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-semibold">{t('scanner_detected_label')}</span>
                   <h3 className="text-xl font-extrabold tracking-tight leading-snug">
                     {analysisResult.defectFound}
@@ -557,8 +560,8 @@ Authorized by Team Cortexa AI Platform | Municipal Corporation
                 </div>
 
                 {/* Structured Severity Progress Meter */}
-                <div className={`p-3 rounded-xl border ${theme === 'dark' ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
-                  <div className="flex items-center justify-between text-xs font-mono mb-1">
+                <div className={`p-3.5 rounded-xl border w-full ${theme === 'dark' ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+                  <div className="flex items-center justify-between text-xs font-mono mb-1.5">
                     <span className="text-slate-400 font-semibold">{t('scanner_severity')}</span>
                     <span className="font-extrabold text-red-500">{analysisResult.severity} / 10</span>
                   </div>
@@ -570,8 +573,8 @@ Authorized by Team Cortexa AI Platform | Municipal Corporation
                   </div>
                 </div>
 
-                {/* Workable Inspection Checklist Grid */}
-                <div className={`grid grid-cols-2 gap-2.5 p-3 rounded-xl border ${theme === 'dark' ? 'bg-slate-950/80 border-slate-800/80' : 'bg-slate-50 border-slate-200'}`}>
+                {/* Inspection Checklist Grid */}
+                <div className={`grid grid-cols-2 gap-2.5 p-3.5 rounded-xl border w-full ${theme === 'dark' ? 'bg-slate-950/80 border-slate-800/80' : 'bg-slate-50 border-slate-200'}`}>
                   <div>
                     <span className="text-[10px] font-mono text-slate-400 block uppercase font-semibold">Surface Area</span>
                     <span className="text-xs font-mono font-bold text-cyan-400">{analysisResult.details.surfaceArea}</span>
@@ -592,9 +595,9 @@ Authorized by Team Cortexa AI Platform | Municipal Corporation
 
                 {/* Dispatch Toast Confirmation */}
                 {dispatchSuccess && (
-                  <div className="p-2.5 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-mono flex items-center justify-between">
+                  <div className="p-3 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-mono flex items-center justify-between w-full">
                     <span className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                       <span>Dispatch Order #WO-9042 sent to Ward Crew!</span>
                     </span>
                     <button onClick={() => setDispatchSuccess(false)} className="text-slate-400 hover:text-white">
@@ -604,11 +607,11 @@ Authorized by Team Cortexa AI Platform | Municipal Corporation
                 )}
 
                 {/* Workable Action Buttons */}
-                <div className={`pt-2 border-t space-y-2 ${theme === 'dark' ? 'border-slate-800' : 'border-slate-200'}`}>
-                  <div className="grid grid-cols-2 gap-2">
+                <div className={`pt-2 border-t space-y-2 w-full ${theme === 'dark' ? 'border-slate-800' : 'border-slate-200'}`}>
+                  <div className="grid grid-cols-2 gap-2 w-full">
                     <button
                       onClick={downloadOfficialPDF}
-                      className="py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer transition-all border border-slate-700"
+                      className="py-2.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer transition-all border border-slate-700 w-full"
                       title="Download Official Municipal Inspection Report"
                     >
                       <Download className="w-3.5 h-3.5 text-cyan-400" />
@@ -617,7 +620,7 @@ Authorized by Team Cortexa AI Platform | Municipal Corporation
 
                     <button
                       onClick={() => setDispatchSuccess(true)}
-                      className="py-2 px-3 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer transition-all shadow-md"
+                      className="py-2.5 px-3 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer transition-all shadow-md w-full"
                       title="Dispatch Emergency Repair Crew"
                     >
                       <Send className="w-3.5 h-3.5" />
@@ -636,13 +639,49 @@ Authorized by Team Cortexa AI Platform | Municipal Corporation
               </motion.div>
             )}
 
-            {/* Idle State */}
+            {/* Standby / Idle State — Full-Width AI Command Center Status Box */}
             {!isScanning && !analysisResult && (
-              <div className="my-auto text-center py-12 text-slate-400 space-y-3">
-                <FileCheck2 className="w-12 h-12 mx-auto text-cyan-400/60" />
-                <p className="text-xs font-mono max-w-xs mx-auto">
-                  Upload an asset photo to generate a workable AI diagnostic report.
-                </p>
+              <div className="my-auto py-8 text-center space-y-6 w-full">
+                <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mx-auto glow-cyan">
+                  <Activity className="w-8 h-8 animate-pulse text-cyan-400" />
+                </div>
+
+                <div className="space-y-2 w-full px-2">
+                  <span className="text-xs font-mono px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 font-bold uppercase tracking-wider">
+                    ● AI SCANNER STANDBY
+                  </span>
+
+                  <h4 className="text-lg font-bold tracking-tight pt-1">
+                    Ready for Photo Analysis
+                  </h4>
+
+                  <p className={`text-xs ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} leading-relaxed max-w-xs mx-auto`}>
+                    Drop an asset photo on the left or click any sample field inspection case below to generate an immediate diagnostic report.
+                  </p>
+                </div>
+
+                {/* Pre-Inspection Sensor Checklist */}
+                <div className={`p-4 rounded-xl border text-left space-y-2 w-full ${
+                  theme === 'dark' ? 'bg-slate-950/80 border-slate-800' : 'bg-slate-50 border-slate-200'
+                }`}>
+                  <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-semibold">
+                    Pre-Inspection Readiness:
+                  </span>
+                  <div className="space-y-1.5 text-xs font-mono text-slate-300">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Optical Sensor Array: <strong className="text-emerald-400">Ready</strong></span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>YOLOv11 Neural Model: <strong className="text-emerald-400">Online</strong></span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>GIS Geo-Clustering: <strong className="text-emerald-400">Connected</strong></span>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
 
