@@ -573,23 +573,27 @@ Authorized by Team Cortexa AI Platform | Municipal Corporation
                   </div>
                 </div>
 
-                {/* Inspection Checklist Grid */}
-                <div className={`grid grid-cols-2 gap-2.5 p-3.5 rounded-xl border w-full ${theme === 'dark' ? 'bg-slate-950/80 border-slate-800/80' : 'bg-slate-50 border-slate-200'}`}>
-                  <div>
-                    <span className="text-[10px] font-mono text-slate-400 block uppercase font-semibold">Surface Area</span>
-                    <span className="text-xs font-mono font-bold text-cyan-400">{analysisResult.details.surfaceArea}</span>
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-mono text-slate-400 block uppercase font-semibold">Estimated Depth</span>
-                    <span className="text-xs font-mono font-bold">{analysisResult.details.estimatedDepth}</span>
-                  </div>
+                {/* Clean 2-Column Inspection Checklist Grid (Surface Area & Depth Removed) */}
+                <div className={`grid grid-cols-2 gap-3 p-3.5 rounded-xl border w-full ${theme === 'dark' ? 'bg-slate-950/80 border-slate-800/80' : 'bg-slate-50 border-slate-200'}`}>
                   <div>
                     <span className="text-[10px] font-mono text-slate-400 block uppercase font-semibold">Failure Window</span>
-                    <span className="text-xs font-mono font-bold text-red-500">{analysisResult.timeToFailure}</span>
+                    <span className="text-xs font-mono font-bold text-red-500 flex items-center gap-1 mt-0.5">
+                      <Clock className="w-3.5 h-3.5" />
+                      {analysisResult.timeToFailure}
+                    </span>
                   </div>
+
                   <div>
-                    <span className="text-[10px] font-mono text-slate-400 block uppercase font-semibold">AI Confidence</span>
-                    <span className="text-xs font-mono font-bold text-emerald-500">{analysisResult.confidence}</span>
+                    <span className="text-[10px] font-mono text-slate-400 block uppercase font-semibold">AI Neural Precision</span>
+                    <span className="text-xs font-mono font-bold text-emerald-500 flex items-center gap-1 mt-0.5">
+                      <ShieldCheck className="w-3.5 h-3.5" />
+                      {analysisResult.confidence}
+                    </span>
+                  </div>
+
+                  <div className="col-span-2 pt-1 border-t border-slate-800/50 flex items-center justify-between">
+                    <span className="text-[10px] font-mono text-slate-400 font-semibold uppercase">GPS Coordinates:</span>
+                    <span className="text-[11px] font-mono font-bold text-cyan-400">{analysisResult.details.coordinates}</span>
                   </div>
                 </div>
 
