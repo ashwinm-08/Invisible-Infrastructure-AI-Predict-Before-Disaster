@@ -15,12 +15,16 @@ import {
   Clock,
   ShieldCheck,
   Building2,
-  Check
+  Download,
+  Send,
+  Printer,
+  X
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 
 interface AnalysisResult {
+  reportId: string;
   fileName: string;
   assetType: string;
   defectFound: string;
@@ -34,12 +38,14 @@ interface AnalysisResult {
     surfaceArea: string;
     estimatedDepth: string;
     structuralVector: string;
+    coordinates: string;
   };
   previewUrl: string | null;
 }
 
 const PRESET_SAMPLES = [
   {
+    reportId: 'RPT-2026-9041',
     name: 'Road_Pothole_Cavity.jpg',
     type: 'Road Infrastructure',
     defect: 'Deep Pothole & Asphalt Cavity',
@@ -53,9 +59,11 @@ const PRESET_SAMPLES = [
       surfaceArea: '1.24 m²',
       estimatedDepth: '14.2 cm',
       structuralVector: 'Cavity Depressive Load',
+      coordinates: '12.9716° N, 77.5946° E',
     },
   },
   {
+    reportId: 'RPT-2026-9042',
     name: 'Transformer_Base_Corrosion.jpg',
     type: 'Electrical Grid Asset',
     defect: 'Transformer Tank Corrosion & Tilt',
@@ -69,9 +77,11 @@ const PRESET_SAMPLES = [
       surfaceArea: '0.85 m²',
       estimatedDepth: 'Tilt 14.8°',
       structuralVector: 'Oxide Surface Degradation',
+      coordinates: '12.9352° N, 77.6245° E',
     },
   },
   {
+    reportId: 'RPT-2026-9043',
     name: 'Bridge_Pier_Structural_Crack.jpg',
     type: 'Bridge & Overpass',
     defect: 'Structural Concrete Shear Fissure',
@@ -85,6 +95,7 @@ const PRESET_SAMPLES = [
       surfaceArea: '0.42 m²',
       estimatedDepth: 'Fissure Length 68 cm',
       structuralVector: 'High Shear Strain',
+      coordinates: '12.9810° N, 77.6100° E',
     },
   },
 ];
@@ -97,6 +108,7 @@ export const FileAnalyzer: React.FC = () => {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const [currentImageSrc, setCurrentImageSrc] = useState<string | null>(null);
+  const [dispatchSuccess, setDispatchSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const scanLogs = [
@@ -104,7 +116,7 @@ export const FileAnalyzer: React.FC = () => {
     'Analyzing Edge Gradient Fissure Vectors...',
     'Calculating Asphalt Cavity & Metal Corrosion Index...',
     'Computing Time-Series Degradation Probability...',
-    'Building Structured Municipal Diagnostic Report...',
+    'Generating Workable Municipal Diagnostic Report...',
   ];
 
   const analyzeUploadedImage = (imageElement: HTMLImageElement, fileName: string, imageSrc: string) => {
@@ -172,8 +184,10 @@ export const FileAnalyzer: React.FC = () => {
 
     const confidenceVal = (98.5 + Math.min(edgeRatio * 4, 1.4)).toFixed(1) + '%';
     const isCritical = severity >= 8.5;
+    const randomRpt = 'RPT-2026-' + Math.floor(Math.random() * 8999 + 1000);
 
     setAnalysisResult({
+      reportId: randomRpt,
       fileName: fileName,
       assetType: detectedType,
       defectFound: defectTitle,
@@ -187,6 +201,7 @@ export const FileAnalyzer: React.FC = () => {
         surfaceArea: `${(darkRatio * 2.5 + 0.4).toFixed(2)} m²`,
         estimatedDepth: `${(darkRatio * 15 + 2).toFixed(1)} cm`,
         structuralVector: edgeRatio > 0.2 ? 'Linear Shear Stress' : 'Surface Cavity Depression',
+        coordinates: '12.9716° N, 77.5946° E',
       },
       previewUrl: imageSrc,
     });
@@ -194,6 +209,7 @@ export const FileAnalyzer: React.FC = () => {
 
   const generateFallbackResult = (fileName: string, imageSrc: string) => {
     setAnalysisResult({
+      reportId: 'RPT-2026-9041',
       fileName: fileName,
       assetType: 'Urban Road Infrastructure',
       defectFound: 'Pothole & Asphalt Subsidence Cavity',
@@ -207,6 +223,7 @@ export const FileAnalyzer: React.FC = () => {
         surfaceArea: '1.24 m²',
         estimatedDepth: '14.2 cm',
         structuralVector: 'Asphalt Cavity Strain',
+        coordinates: '12.9716° N, 77.5946° E',
       },
       previewUrl: imageSrc,
     });
@@ -222,6 +239,7 @@ export const FileAnalyzer: React.FC = () => {
     setIsScanning(true);
     setScanStep(0);
     setAnalysisResult(null);
+    setDispatchSuccess(false);
 
     let currentStep = 0;
     const interval = setInterval(() => {
@@ -246,6 +264,7 @@ export const FileAnalyzer: React.FC = () => {
     setIsScanning(true);
     setScanStep(0);
     setAnalysisResult(null);
+    setDispatchSuccess(false);
 
     let currentStep = 0;
     const interval = setInterval(() => {
@@ -256,6 +275,7 @@ export const FileAnalyzer: React.FC = () => {
         clearInterval(interval);
         setIsScanning(false);
         setAnalysisResult({
+          reportId: preset.reportId,
           fileName: preset.name,
           assetType: preset.type,
           defectFound: preset.defect,
@@ -280,6 +300,42 @@ export const FileAnalyzer: React.FC = () => {
     }
   };
 
+  const downloadOfficialPDF = () => {
+    if (!analysisResult) return;
+    const reportContent = `
+===================================================================
+INVISIBLE INFRASTRUCTURE AI — OFFICIAL MUNICIPAL INSPECTION REPORT
+===================================================================
+Report ID       : ${analysisResult.reportId}
+Timestamp       : ${new Date().toLocaleString()}
+Asset Class     : ${analysisResult.assetType}
+Detected Defect : ${analysisResult.defectFound}
+Severity Score  : ${analysisResult.severity} / 10 (${analysisResult.riskLevel})
+AI Confidence   : ${analysisResult.confidence}
+Failure Window  : ${analysisResult.timeToFailure}
+Geo Coordinates : ${analysisResult.details.coordinates}
+Surface Area    : ${analysisResult.details.surfaceArea}
+Estimated Depth : ${analysisResult.details.estimatedDepth}
+Recommended Work: ${analysisResult.actionRequired}
+===================================================================
+Authorized by Team Cortexa AI Platform | Municipal Corporation
+===================================================================
+    `;
+    const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `${analysisResult.reportId}_Inspection_Report.txt`;
+    link.click();
+  };
+
+  const pinToHealthMap = () => {
+    const el = document.getElementById('health-map');
+    if (el) {
+      const offsetTop = el.offsetTop - 80;
+      window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+    }
+  };
+
   return (
     <section id="ai-scanner" className={`py-24 relative border-t transition-colors ${theme === 'dark' ? 'bg-[#0D1117] border-slate-800/80 text-slate-100' : 'bg-slate-50 border-slate-200 text-slate-900'}`}>
       {/* Background Orbs */}
@@ -289,7 +345,7 @@ export const FileAnalyzer: React.FC = () => {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-widest font-semibold">
             <Cpu className="w-3.5 h-3.5 animate-pulse" />
             <span>{t('scanner_tag')}</span>
           </div>
@@ -401,7 +457,7 @@ export const FileAnalyzer: React.FC = () => {
 
             {/* Quick Demo Presets */}
             <div className={`glass-panel rounded-xl p-4 border ${theme === 'dark' ? 'border-slate-800 bg-slate-900/60' : 'border-slate-200 bg-white'}`}>
-              <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block mb-2">
+              <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block mb-2 font-semibold">
                 {t('scanner_preset_label')}
               </span>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -426,8 +482,8 @@ export const FileAnalyzer: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Structured Diagnostic Card (5 cols) — NO RAW TELEMETRY BOX */}
-          <div className={`glass-panel rounded-2xl border p-6 space-y-5 relative overflow-hidden min-h-[420px] flex flex-col justify-between ${
+          {/* Right Structured Diagnostic Report Card (5 cols) */}
+          <div className={`glass-panel rounded-2xl border p-6 space-y-5 relative overflow-hidden min-h-[440px] flex flex-col justify-between ${
             theme === 'dark' ? 'border-slate-800 bg-slate-900/90' : 'border-slate-200 bg-white shadow-xl'
           }`}>
             
@@ -462,18 +518,21 @@ export const FileAnalyzer: React.FC = () => {
               </div>
             )}
 
-            {/* Restructured Clean Diagnostic Result Display */}
+            {/* Workable Structured AI Inspection Report */}
             {!isScanning && analysisResult && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="space-y-5"
+                className="space-y-4"
               >
                 {/* Clean Header Bar */}
                 <div className={`flex items-center justify-between border-b pb-3 ${theme === 'dark' ? 'border-slate-800' : 'border-slate-200'}`}>
-                  <div className="flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-cyan-400" />
-                    <span className="text-xs font-mono font-bold text-cyan-400">{t('scanner_result_badge')}</span>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <ShieldCheck className="w-4 h-4 text-cyan-400" />
+                      <span className="text-xs font-mono font-bold text-cyan-400">{t('scanner_result_badge')}</span>
+                    </div>
+                    <span className="text-[10px] font-mono text-slate-400 block mt-0.5">ID: {analysisResult.reportId}</span>
                   </div>
 
                   <span className={`text-xs font-mono px-2.5 py-1 rounded-full border ${
@@ -491,19 +550,18 @@ export const FileAnalyzer: React.FC = () => {
                   <h3 className="text-xl font-extrabold tracking-tight leading-snug">
                     {analysisResult.defectFound}
                   </h3>
-                  <p className="text-xs font-mono text-cyan-500 font-semibold flex items-center gap-1.5 mt-1">
+                  <p className="text-xs font-mono text-cyan-500 font-semibold flex items-center gap-1.5 mt-0.5">
                     <Building2 className="w-3.5 h-3.5" />
                     <span>Asset: {analysisResult.assetType}</span>
                   </p>
                 </div>
 
                 {/* Structured Severity Progress Meter */}
-                <div className={`p-3.5 rounded-xl border ${theme === 'dark' ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
-                  <div className="flex items-center justify-between text-xs font-mono mb-1.5">
+                <div className={`p-3 rounded-xl border ${theme === 'dark' ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+                  <div className="flex items-center justify-between text-xs font-mono mb-1">
                     <span className="text-slate-400 font-semibold">{t('scanner_severity')}</span>
                     <span className="font-extrabold text-red-500">{analysisResult.severity} / 10</span>
                   </div>
-                  {/* Progress Meter Bar */}
                   <div className={`w-full h-2 rounded-full overflow-hidden ${theme === 'dark' ? 'bg-slate-800' : 'bg-slate-200'}`}>
                     <div 
                       className="h-full bg-gradient-to-r from-amber-400 to-red-500 rounded-full"
@@ -512,8 +570,8 @@ export const FileAnalyzer: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Structured Inspection Checklist (Replaces Raw Telemetry Matrix) */}
-                <div className={`grid grid-cols-2 gap-3 p-3.5 rounded-xl border ${theme === 'dark' ? 'bg-slate-950/80 border-slate-800/80' : 'bg-slate-50 border-slate-200'}`}>
+                {/* Workable Inspection Checklist Grid */}
+                <div className={`grid grid-cols-2 gap-2.5 p-3 rounded-xl border ${theme === 'dark' ? 'bg-slate-950/80 border-slate-800/80' : 'bg-slate-50 border-slate-200'}`}>
                   <div>
                     <span className="text-[10px] font-mono text-slate-400 block uppercase font-semibold">Surface Area</span>
                     <span className="text-xs font-mono font-bold text-cyan-400">{analysisResult.details.surfaceArea}</span>
@@ -532,23 +590,43 @@ export const FileAnalyzer: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Recommended Municipal Dispatch */}
-                <div className={`p-3.5 rounded-xl border ${theme === 'dark' ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'} space-y-1`}>
-                  <span className="text-[10px] font-mono text-amber-500 font-semibold block flex items-center gap-1">
-                    <AlertTriangle className="w-3.5 h-3.5" />
-                    {t('scanner_action_label')}
-                  </span>
-                  <p className="text-xs font-medium leading-relaxed">
-                    {analysisResult.actionRequired}
-                  </p>
-                </div>
+                {/* Dispatch Toast Confirmation */}
+                {dispatchSuccess && (
+                  <div className="p-2.5 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-mono flex items-center justify-between">
+                    <span className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                      <span>Dispatch Order #WO-9042 sent to Ward Crew!</span>
+                    </span>
+                    <button onClick={() => setDispatchSuccess(false)} className="text-slate-400 hover:text-white">
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                )}
 
-                {/* Pin Defect Action Button */}
-                <div className={`pt-2 border-t ${theme === 'dark' ? 'border-slate-800' : 'border-slate-200'}`}>
+                {/* Workable Action Buttons */}
+                <div className={`pt-2 border-t space-y-2 ${theme === 'dark' ? 'border-slate-800' : 'border-slate-200'}`}>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      onClick={downloadOfficialPDF}
+                      className="py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer transition-all border border-slate-700"
+                      title="Download Official Municipal Inspection Report"
+                    >
+                      <Download className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>Download Report</span>
+                    </button>
+
+                    <button
+                      onClick={() => setDispatchSuccess(true)}
+                      className="py-2 px-3 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer transition-all shadow-md"
+                      title="Dispatch Emergency Repair Crew"
+                    >
+                      <Send className="w-3.5 h-3.5" />
+                      <span>Dispatch Crew</span>
+                    </button>
+                  </div>
+
                   <button
-                    onClick={() => {
-                      alert(`Defect pinned! "${analysisResult.defectFound}" added to Health Map.`);
-                    }}
+                    onClick={pinToHealthMap}
                     className="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs tracking-wide transition-all shadow-md shadow-cyan-500/20 flex items-center justify-center gap-2 cursor-pointer hover:scale-[1.01] active:scale-[0.99]"
                   >
                     <MapPin className="w-4 h-4" />
@@ -563,7 +641,7 @@ export const FileAnalyzer: React.FC = () => {
               <div className="my-auto text-center py-12 text-slate-400 space-y-3">
                 <FileCheck2 className="w-12 h-12 mx-auto text-cyan-400/60" />
                 <p className="text-xs font-mono max-w-xs mx-auto">
-                  Upload an asset photo to generate a structured AI diagnostic report.
+                  Upload an asset photo to generate a workable AI diagnostic report.
                 </p>
               </div>
             )}
