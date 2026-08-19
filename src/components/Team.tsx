@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Sparkles, Award, Github, Linkedin, Mail } from 'lucide-react';
+import { Shield, Github, Linkedin, Mail } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 const MEMBERS = [
   {
@@ -54,92 +55,102 @@ const MEMBERS = [
 ];
 
 export const Team: React.FC = () => {
+  const { theme } = useTheme();
+
   return (
-    <section id="team" className="py-24 bg-[#0D1117] relative border-t border-slate-800/80">
+    <section id="team" className={`py-24 relative border-t transition-colors ${
+      theme === 'dark' ? 'bg-[#0D1117] border-slate-800/80 text-slate-100' : 'bg-slate-50 border-slate-200 text-slate-900'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono uppercase tracking-widest">
-            <Shield className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Hackathon Engineers</span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-widest font-semibold">
+            <Shield className="w-3.5 h-3.5" />
+            <span>The Engineers Behind The Vision</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-            Meet Team Cortexa
+          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
+            Meet <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-300">Team Cortexa</span>.
           </h2>
 
-          <p className="text-slate-300 text-base">
-            The minds building predictive AI infrastructure to protect urban communities worldwide.
+          <p className={`${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} text-base sm:text-lg`}>
+            A specialized group of AI architects, full-stack systems engineers, and data scientists.
           </p>
         </div>
 
-        {/* 4 Member Cards */}
+        {/* 4 Member Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {MEMBERS.map((member, index) => (
             <motion.div
               key={member.name}
-              initial={{ opacity: 0, y: 25 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.12 }}
-              className="glass-panel glass-panel-hover rounded-2xl p-6 flex flex-col justify-between relative group border border-slate-800 text-center"
+              className={`glass-panel glass-panel-hover rounded-2xl p-6 border flex flex-col justify-between relative group ${
+                theme === 'dark' ? 'border-slate-800 bg-slate-900/60' : 'border-slate-200 bg-white shadow-lg'
+              }`}
             >
-              <div className="space-y-4 flex flex-col items-center">
-                
-                {/* Initials Avatar Circle */}
-                <div
-                  className={`w-20 h-20 rounded-full bg-gradient-to-br ${member.gradient} text-slate-950 font-extrabold font-mono text-2xl flex items-center justify-center border-4 border-slate-900 shadow-xl shadow-cyan-950/40 group-hover:scale-105 transition-transform duration-300`}
-                >
-                  {member.initials}
-                </div>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${member.gradient} text-slate-950 font-bold text-xl flex items-center justify-center border-2 border-slate-950 shadow-xl group-hover:scale-105 transition-transform`}>
+                    {member.initials}
+                  </div>
 
-                {/* Name & Role */}
-                <div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 text-cyan-300 border border-slate-700 uppercase tracking-widest inline-block mb-1">
+                  <span className={`text-[10px] font-mono px-2.5 py-1 rounded-full border ${
+                    member.badge === 'Team Lead'
+                      ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500/40 font-bold'
+                      : 'bg-slate-800 text-slate-400 border-slate-700'
+                  }`}>
                     {member.badge}
                   </span>
-                  <h3 className="text-xl font-bold text-white tracking-tight group-hover:text-cyan-300 transition-colors">
-                    {member.name}
-                  </h3>
-                  <p className="text-xs font-mono text-cyan-400/90 mt-0.5">
-                    {member.role}
-                  </p>
                 </div>
 
-                {/* Bio */}
-                <p className="text-slate-300 text-xs leading-relaxed">
+                <div>
+                  <h3 className="text-xl font-bold tracking-tight">
+                    {member.name}
+                  </h3>
+                  <span className="text-xs font-mono text-cyan-400 font-semibold block mt-0.5">
+                    {member.role}
+                  </span>
+                </div>
+
+                <p className={`${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} text-xs leading-relaxed`}>
                   {member.bio}
                 </p>
               </div>
 
-              {/* Social action buttons */}
-              <div className="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-center gap-3 text-slate-400">
-                <a
-                  href={member.githubUrl}
-                  target={member.githubUrl !== '#' ? '_blank' : '_self'}
-                  rel="noopener noreferrer"
-                  className="p-2 rounded-lg bg-slate-900/80 hover:bg-slate-800 hover:text-cyan-300 border border-slate-800 hover:border-cyan-500/40 transition-all cursor-pointer"
-                  aria-label={`${member.name} GitHub`}
-                >
-                  <Github className="w-4 h-4" />
-                </a>
-                <a
-                  href={member.linkedinUrl}
-                  target={member.linkedinUrl !== '#' ? '_blank' : '_self'}
-                  rel="noopener noreferrer"
-                  className="p-2 rounded-lg bg-slate-900/80 hover:bg-slate-800 hover:text-cyan-300 border border-slate-800 hover:border-cyan-500/40 transition-all cursor-pointer"
-                  aria-label={`${member.name} LinkedIn`}
-                >
-                  <Linkedin className="w-4 h-4" />
-                </a>
-                <a
-                  href={member.emailUrl}
-                  className="p-2 rounded-lg bg-slate-900/80 hover:bg-slate-800 hover:text-cyan-300 border border-slate-800 hover:border-cyan-500/40 transition-all cursor-pointer"
-                  aria-label={`${member.name} Email`}
-                >
-                  <Mail className="w-4 h-4" />
-                </a>
+              {/* Social & Contact Buttons */}
+              <div className={`mt-6 pt-4 border-t ${theme === 'dark' ? 'border-slate-800' : 'border-slate-200'} flex items-center justify-between`}>
+                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Connect:</span>
+                <div className="flex items-center gap-2">
+                  <a
+                    href={member.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-cyan-500 hover:text-slate-950 text-slate-300 transition-colors"
+                    title={`${member.name}'s GitHub`}
+                  >
+                    <Github className="w-3.5 h-3.5" />
+                  </a>
+                  <a
+                    href={member.linkedinUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-cyan-500 hover:text-slate-950 text-slate-300 transition-colors"
+                    title={`${member.name}'s LinkedIn`}
+                  >
+                    <Linkedin className="w-3.5 h-3.5" />
+                  </a>
+                  <a
+                    href={member.emailUrl}
+                    className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-cyan-500 hover:text-slate-950 text-slate-300 transition-colors"
+                    title={`Email ${member.name}`}
+                  >
+                    <Mail className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
             </motion.div>
           ))}

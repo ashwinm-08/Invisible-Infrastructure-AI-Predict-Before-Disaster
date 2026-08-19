@@ -1,5 +1,6 @@
 import React from 'react';
-import { ShieldCheck, Heart } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 const NAV_LINKS = [
   { label: 'Problem', href: '#problem' },
@@ -13,6 +14,8 @@ const NAV_LINKS = [
 ];
 
 export const Footer: React.FC = () => {
+  const { theme } = useTheme();
+
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     const targetId = href.replace('#', '');
@@ -24,7 +27,9 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-[#070A0F] text-slate-400 py-16 border-t border-slate-900 font-sans">
+    <footer className={`py-16 border-t font-sans transition-colors ${
+      theme === 'dark' ? 'bg-[#070A0F] text-slate-400 border-slate-900' : 'bg-slate-900 text-slate-300 border-slate-800'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         
         {/* Top Grid */}
@@ -68,7 +73,7 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Attribution Bar */}
-        <div className="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-mono">
+        <div className="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 font-mono">
           <div>
             &copy; {new Date().getFullYear()} Team Cortexa (Mahitha Reddy G, Ashwin M, Ragavendra M, Kanimozhi A). All rights reserved.
           </div>

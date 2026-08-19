@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { CountUp } from './CountUp';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from 'recharts';
+import { useTheme } from '../context/ThemeContext';
 
 export interface DefectMarker {
   id: string;
@@ -147,6 +148,7 @@ const CHART_DATA = [
 ];
 
 export const HealthMap: React.FC = () => {
+  const { theme } = useTheme();
   const [filter, setFilter] = useState<'all' | 'critical' | 'high' | 'stable'>('all');
   const [selectedPin, setSelectedPin] = useState<DefectMarker | null>(MOCK_DEFECTS[0]);
 
@@ -188,7 +190,9 @@ export const HealthMap: React.FC = () => {
   };
 
   return (
-    <section id="health-map" className="py-24 bg-[#0A0E14] relative border-t border-slate-800/80">
+    <section id="health-map" className={`py-24 relative border-t transition-colors ${
+      theme === 'dark' ? 'bg-[#0A0E14] border-slate-800/80 text-slate-100' : 'bg-slate-100 border-slate-200 text-slate-900'
+    }`}>
       {/* Glow Orbs */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-cyan-500/5 rounded-full blur-[150px] pointer-events-none" />
 

@@ -9,6 +9,7 @@ import {
   Map, 
   Zap 
 } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 const FEATURES = [
   {
@@ -50,55 +51,60 @@ const FEATURES = [
 ];
 
 export const Features: React.FC = () => {
+  const { theme } = useTheme();
+
   return (
-    <section id="features" className="py-24 bg-[#0D1117] relative border-t border-slate-800/80">
+    <section id="features" className={`py-24 relative border-t transition-colors ${
+      theme === 'dark' ? 'bg-[#0D1117] border-slate-800/80 text-slate-100' : 'bg-slate-50 border-slate-200 text-slate-900'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-widest font-semibold">
             <Zap className="w-3.5 h-3.5" />
             <span>Platform Capabilities</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-            Built for scale, precision, and <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-300">
-              municipal action.
+          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
+            Built for civic impact. <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-amber-300">
+              Powered by deep AI.
             </span>
           </h2>
+
+          <p className={`${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} text-base sm:text-lg`}>
+            Everything city officials and citizens need to convert raw visual data into preventive infrastructure maintenance.
+          </p>
         </div>
 
-        {/* 6-Card Grid (3x2 Desktop, 1-col Mobile) */}
+        {/* 6-Card Feature Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {FEATURES.map((feature, index) => {
             const IconComponent = feature.icon;
             return (
               <motion.div
                 key={feature.title}
-                initial={{ opacity: 0, y: 25 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="glass-panel glass-panel-hover rounded-2xl p-8 flex flex-col justify-between relative group border border-slate-800"
+                className={`glass-panel glass-panel-hover rounded-2xl p-8 border flex flex-col justify-between transition-all group ${
+                  theme === 'dark' ? 'border-slate-800 bg-slate-900/60' : 'border-slate-200 bg-white shadow-lg'
+                }`}
               >
                 <div className="space-y-4">
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${feature.accent}`}>
+                  <div className={`w-12 h-12 rounded-xl border flex items-center justify-center ${feature.accent}`}>
                     <IconComponent className="w-6 h-6" />
                   </div>
 
-                  <h3 className="text-xl font-bold text-white tracking-tight group-hover:text-cyan-300 transition-colors">
+                  <h3 className="text-xl font-bold tracking-tight">
                     {feature.title}
                   </h3>
 
-                  <p className="text-slate-300 text-sm leading-relaxed">
+                  <p className={`${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} text-sm leading-relaxed`}>
                     {feature.description}
                   </p>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-slate-800/80 text-[11px] font-mono text-slate-500 flex items-center justify-between">
-                  <span>FEATURE 0{index + 1}</span>
-                  <span className="text-cyan-400/80 group-hover:text-cyan-300 transition-colors">Active Module</span>
                 </div>
               </motion.div>
             );

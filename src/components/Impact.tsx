@@ -7,6 +7,7 @@ import {
   Users,
   CheckCircle 
 } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 const IMPACTS = [
   {
@@ -40,18 +41,22 @@ const IMPACTS = [
 ];
 
 export const Impact: React.FC = () => {
+  const { theme } = useTheme();
+
   return (
-    <section id="impact" className="py-24 bg-[#0D1117] relative border-t border-slate-800/80">
+    <section id="impact" className={`py-24 relative border-t transition-colors ${
+      theme === 'dark' ? 'bg-[#0D1117] border-slate-800/80 text-slate-100' : 'bg-slate-50 border-slate-200 text-slate-900'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-widest font-semibold">
             <CheckCircle className="w-3.5 h-3.5" />
             <span>Why This Matters</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
             Transforming urban safety <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-300">
               at every level.
@@ -59,37 +64,38 @@ export const Impact: React.FC = () => {
           </h2>
         </div>
 
-        {/* 4-Card Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {IMPACTS.map((impact, index) => {
-            const IconComp = impact.icon;
+        {/* 4-Card Impact Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {IMPACTS.map((item, index) => {
+            const IconComp = item.icon;
             return (
               <motion.div
-                key={impact.title}
-                initial={{ opacity: 0, y: 25 }}
+                key={item.title}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.12 }}
-                className="glass-panel glass-panel-hover rounded-2xl p-8 flex flex-col justify-between relative group border border-slate-800"
+                className={`glass-panel glass-panel-hover rounded-2xl p-8 border flex flex-col justify-between transition-all group ${
+                  theme === 'dark' ? 'border-slate-800 bg-slate-900/60' : 'border-slate-200 bg-white shadow-lg'
+                }`}
               >
                 <div className="space-y-4">
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${impact.accent}`}>
-                    <IconComp className="w-6 h-6" />
+                  <div className="flex items-center justify-between">
+                    <div className={`w-12 h-12 rounded-xl border flex items-center justify-center ${item.accent}`}>
+                      <IconComp className="w-6 h-6" />
+                    </div>
+                    <span className="text-xs font-mono px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 font-semibold">
+                      {item.highlight}
+                    </span>
                   </div>
 
-                  <h3 className="text-xl font-bold text-white tracking-tight group-hover:text-cyan-300 transition-colors">
-                    {impact.title}
+                  <h3 className="text-2xl font-bold tracking-tight">
+                    {item.title}
                   </h3>
 
-                  <p className="text-slate-300 text-sm leading-relaxed">
-                    {impact.description}
+                  <p className={`${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} text-base leading-relaxed`}>
+                    {item.description}
                   </p>
-                </div>
-
-                <div className="mt-8 pt-4 border-t border-slate-800/80">
-                  <span className="text-xs font-mono font-semibold text-cyan-400 block">
-                    {impact.highlight}
-                  </span>
                 </div>
               </motion.div>
             );

@@ -9,6 +9,7 @@ import {
   ArrowDown,
   Server
 } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 const LAYERS = [
   {
@@ -58,97 +59,93 @@ const LAYERS = [
     description: 'Auto-generated PDF authority maintenance reports + interactive real-time Infrastructure Health Map for municipal ward engineers.',
     icon: LayoutDashboard,
     color: 'from-emerald-500/20 to-teal-500/10 border-emerald-500/40 text-emerald-400',
-    badge: 'COMMAND CENTER UI',
-    tools: ['Real-Time GIS Web Canvas', 'Automated PDF Report Generator', 'Municipal Work-Order Sync'],
+    badge: 'COMMAND CENTER',
+    tools: ['Interactive Mapbox/Leaflet UI', 'PDF Dispatch Generator', 'Municipal ERP API Bridge'],
   },
 ];
 
 export const Architecture: React.FC = () => {
-  return (
-    <section id="architecture" className="py-24 bg-[#0A0E14] relative border-t border-slate-800/60 overflow-hidden">
-      {/* Background radial glow */}
-      <div className="absolute top-1/2 left-0 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[160px] pointer-events-none" />
+  const { theme } = useTheme();
 
+  return (
+    <section id="architecture" className={`py-24 relative border-t transition-colors ${
+      theme === 'dark' ? 'bg-[#0A0E14] border-slate-800/80 text-slate-100' : 'bg-slate-100 border-slate-200 text-slate-900'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-widest font-semibold">
             <Server className="w-3.5 h-3.5" />
-            <span>System Architecture</span>
+            <span>Technical Architecture</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-            Under the hood.
+          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
+            5-Layer Deep Tech <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-amber-300">
+              System Design.
+            </span>
           </h2>
 
-          <p className="text-slate-300 text-base sm:text-lg">
-            A modular 5-layer tech stack designed for low latency, high accuracy, and enterprise-grade municipal scalability.
+          <p className={`${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} text-base sm:text-lg`}>
+            From raw camera frames to enterprise spatial clustering and automated municipal ERP dispatches.
           </p>
         </div>
 
-        {/* Stacked Layer Cards Diagram */}
-        <div className="max-w-4xl mx-auto space-y-4 relative">
+        {/* Stacked 5-Layer Diagram */}
+        <div className="max-w-4xl mx-auto space-y-6">
           {LAYERS.map((layer, index) => {
-            const LayerIcon = layer.icon;
+            const IconComp = layer.icon;
             return (
               <React.Fragment key={layer.layerNumber}>
                 <motion.div
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className={`glass-panel rounded-2xl p-6 sm:p-8 bg-gradient-to-r ${layer.color} border shadow-lg relative group transition-all duration-300 hover:scale-[1.01]`}
+                  className={`glass-panel rounded-2xl p-6 sm:p-8 border flex flex-col md:flex-row items-start md:items-center justify-between gap-6 transition-all group ${
+                    theme === 'dark' ? 'border-slate-800 bg-slate-900/70 hover:border-cyan-500/40' : 'border-slate-200 bg-white hover:border-cyan-500/40 shadow-lg'
+                  }`}
                 >
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    
-                    {/* Left Icon + Layer Info */}
-                    <div className="flex items-start gap-4 flex-1">
-                      <div className="w-12 h-12 rounded-xl bg-slate-900/90 border border-slate-700/80 flex items-center justify-center text-white shrink-0 shadow-md">
-                        <LayerIcon className="w-6 h-6" />
-                      </div>
-
-                      <div className="space-y-1.5">
-                        <div className="flex items-center gap-3">
-                          <span className="font-mono text-xs font-bold text-slate-400">
-                            LAYER 0{layer.layerNumber}
-                          </span>
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 text-slate-300 border border-slate-700">
-                            {layer.badge}
-                          </span>
-                        </div>
-
-                        <h3 className="text-xl font-bold text-white tracking-tight">
-                          {layer.title} <span className="text-slate-400 text-sm font-normal">— {layer.subtitle}</span>
-                        </h3>
-
-                        <p className="text-slate-300 text-sm leading-relaxed max-w-2xl">
-                          {layer.description}
-                        </p>
-                      </div>
+                  <div className="flex items-start gap-4 sm:gap-6">
+                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${layer.color} border flex items-center justify-center shrink-0 shadow-lg`}>
+                      <IconComp className="w-7 h-7" />
                     </div>
 
-                    {/* Right Tech Tags */}
-                    <div className="flex md:flex-col flex-wrap gap-2 justify-end shrink-0 pt-3 md:pt-0 border-t md:border-t-0 border-slate-800">
-                      {layer.tools.map((tool) => (
-                        <span
-                          key={tool}
-                          className="text-[11px] font-mono px-2.5 py-1 rounded bg-slate-950/80 text-slate-300 border border-slate-800"
-                        >
-                          {tool}
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs font-mono px-2.5 py-0.5 rounded bg-cyan-500/20 text-cyan-400 font-bold border border-cyan-500/30">
+                          LAYER 0{layer.layerNumber}
                         </span>
-                      ))}
-                    </div>
+                        <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">
+                          {layer.badge}
+                        </span>
+                      </div>
 
+                      <h3 className="text-xl sm:text-2xl font-bold tracking-tight">
+                        {layer.title} <span className={`text-sm font-normal ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>({layer.subtitle})</span>
+                      </h3>
+
+                      <p className={`${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} text-xs sm:text-sm max-w-2xl leading-relaxed`}>
+                        {layer.description}
+                      </p>
+
+                      <div className="pt-2 flex flex-wrap items-center gap-2">
+                        {layer.tools.map((tool) => (
+                          <span key={tool} className={`text-[10px] font-mono px-2 py-0.5 rounded border ${
+                            theme === 'dark' ? 'bg-slate-950 text-slate-400 border-slate-800' : 'bg-slate-100 text-slate-600 border-slate-200'
+                          }`}>
+                            {tool}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </motion.div>
 
-                {/* Downward Connector Arrow between layers */}
                 {index < LAYERS.length - 1 && (
-                  <div className="flex justify-center my-1">
-                    <div className="w-7 h-7 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-cyan-400 shadow-md">
-                      <ArrowDown className="w-4 h-4 animate-bounce" />
-                    </div>
+                  <div className="flex justify-center py-1">
+                    <ArrowDown className="w-5 h-5 text-cyan-400/60 animate-bounce" />
                   </div>
                 )}
               </React.Fragment>

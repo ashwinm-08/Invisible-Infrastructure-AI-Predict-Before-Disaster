@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ShieldCheck, ArrowRight, Activity, Eye, Zap, AlertTriangle, Scan, CheckCircle2 } from 'lucide-react';
+import { ShieldCheck, ArrowRight, Activity, Scan, CheckCircle2 } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
 
 const TEAM_MEMBERS = [
   { initials: 'MG', name: 'Mahitha Reddy G', role: 'Team Lead', color: 'from-cyan-500 to-blue-500' },
@@ -43,6 +45,8 @@ const SCAN_DEFECTS = [
 ];
 
 export const Hero: React.FC = () => {
+  const { t } = useLanguage();
+  const { theme } = useTheme();
   const [activeDefectIndex, setActiveDefectIndex] = useState(0);
 
   useEffect(() => {
@@ -63,10 +67,11 @@ export const Hero: React.FC = () => {
   };
 
   return (
-    <section id="top" className="relative min-h-screen pt-32 pb-20 overflow-hidden flex flex-col justify-center bg-[#0A0E14] bg-grid-pattern">
+    <section id="top" className={`relative min-h-screen pt-32 pb-20 overflow-hidden flex flex-col justify-center transition-colors ${
+      theme === 'dark' ? 'bg-[#0A0E14] bg-grid-pattern text-slate-100' : 'bg-slate-50 bg-grid-pattern text-slate-900'
+    }`}>
       {/* Glow Orbs */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute top-1/3 right-10 w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -79,22 +84,22 @@ export const Hero: React.FC = () => {
             className="lg:col-span-7 space-y-6 text-left"
           >
             {/* Eyebrow Tag */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono tracking-wider uppercase">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono tracking-wider uppercase">
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-              <span>PREDICTIVE URBAN INFRASTRUCTURE MONITORING</span>
+              <span>{t('hero_eyebrow')}</span>
             </div>
 
-            {/* Massive Headline */}
-            <h1 className="text-4xl sm:text-6xl xl:text-7xl font-extrabold text-white tracking-tight leading-[1.08]">
-              Predict Before <br />
+            {/* Headline */}
+            <h1 className="text-4xl sm:text-6xl xl:text-7xl font-extrabold tracking-tight leading-[1.08]">
+              {t('hero_title1')} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-amber-300 drop-shadow-sm">
-                Disaster.
+                {t('hero_title2')}
               </span>
             </h1>
 
             {/* Subheadline */}
-            <p className="text-lg sm:text-xl text-slate-300 max-w-2xl font-normal leading-relaxed">
-              An AI platform that detects, scores, and predicts infrastructure failures — <span className="text-white font-medium">from a single photo</span> — before they become catastrophic accidents.
+            <p className={`text-lg sm:text-xl ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} max-w-2xl font-normal leading-relaxed`}>
+              {t('hero_subheadline')}
             </p>
 
             {/* CTA Buttons */}
@@ -103,21 +108,25 @@ export const Hero: React.FC = () => {
                 onClick={() => scrollToSection('how-it-works')}
                 className="px-6 py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm tracking-wide transition-all duration-300 shadow-lg shadow-cyan-500/25 flex items-center gap-2.5 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
               >
-                <span>See How It Works</span>
+                <span>{t('hero_cta_how')}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
               <button
                 onClick={() => scrollToSection('health-map')}
-                className="px-6 py-3.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-white font-semibold text-sm border border-slate-700/80 hover:border-cyan-500/40 transition-all duration-300 flex items-center gap-2.5 backdrop-blur-sm cursor-pointer"
+                className={`px-6 py-3.5 rounded-xl font-semibold text-sm border transition-all duration-300 flex items-center gap-2.5 backdrop-blur-sm cursor-pointer ${
+                  theme === 'dark'
+                    ? 'bg-slate-900/80 hover:bg-slate-800 text-white border-slate-700 hover:border-cyan-500/40'
+                    : 'bg-white hover:bg-slate-100 text-slate-900 border-slate-300 hover:border-cyan-500/40 shadow-sm'
+                }`}
               >
                 <Activity className="w-4 h-4 text-cyan-400" />
-                <span>Explore the Health Map</span>
+                <span>{t('hero_cta_map')}</span>
               </button>
             </div>
 
             {/* Team Cortexa Badges */}
-            <div className="pt-6 border-t border-slate-800/80 flex flex-wrap items-center gap-4">
+            <div className={`pt-6 border-t ${theme === 'dark' ? 'border-slate-800' : 'border-slate-200'} flex flex-wrap items-center gap-4`}>
               <div className="flex items-center gap-2 text-xs font-mono text-slate-400 uppercase tracking-widest">
                 <ShieldCheck className="w-4 h-4 text-cyan-400" />
                 <span>Built by Team Cortexa</span>
@@ -129,11 +138,10 @@ export const Hero: React.FC = () => {
                     className="relative group cursor-pointer"
                   >
                     <div
-                      className={`w-8 h-8 rounded-full bg-gradient-to-br ${member.color} text-slate-950 font-bold text-xs flex items-center justify-center border-2 border-[#0A0E14] shadow-md transition-transform group-hover:scale-110 group-hover:z-20`}
+                      className={`w-8 h-8 rounded-full bg-gradient-to-br ${member.color} text-slate-950 font-bold text-xs flex items-center justify-center border-2 ${theme === 'dark' ? 'border-[#0A0E14]' : 'border-white'} shadow-md transition-transform group-hover:scale-110 group-hover:z-20`}
                     >
                       {member.initials}
                     </div>
-                    {/* Tooltip on hover */}
                     <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-30 whitespace-nowrap bg-slate-900 text-slate-100 text-xs py-1 px-2.5 rounded border border-slate-700 shadow-xl pointer-events-none">
                       <p className="font-semibold text-cyan-300">{member.name}</p>
                       <p className="text-[10px] text-slate-400">{member.role}</p>
@@ -144,121 +152,77 @@ export const Hero: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Right Column: Dynamic AI Defect Bounding Box Scanning Canvas */}
+          {/* Right Column: AI Scan Bounding Box Display */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="lg:col-span-5 relative"
           >
-            <div className="relative rounded-2xl bg-slate-900/90 border border-slate-800 p-3 shadow-2xl shadow-cyan-950/40 overflow-hidden group">
-              {/* Outer HUD Header bar */}
-              <div className="flex items-center justify-between px-3 py-2 border-b border-slate-800 text-xs font-mono text-slate-400 mb-2 bg-slate-950/60 rounded-t-xl">
+            <div className={`relative rounded-2xl border p-3 shadow-2xl overflow-hidden group ${
+              theme === 'dark' ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
+            }`}>
+              <div className={`flex items-center justify-between px-3 py-2 border-b text-xs font-mono text-slate-400 mb-2 rounded-t-xl ${
+                theme === 'dark' ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-100 border-slate-200'
+              }`}>
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   <span className="text-cyan-400 font-semibold">CORTEXA-VISION v3.8</span>
                 </div>
-                <div className="flex items-center gap-3 text-[11px]">
-                  <span>FPS: 60.0</span>
-                  <span className="text-slate-500">|</span>
-                  <span className="text-cyan-300">LIVE SCANNING</span>
-                </div>
+                <span>FPS: 60 | INFERENCE: 12ms</span>
               </div>
 
-              {/* Main Simulated AI Viewport */}
-              <div className="relative aspect-[4/3] rounded-xl bg-slate-950 overflow-hidden border border-slate-800/80">
-                {/* Cyber Grid Background inside canvas */}
-                <div className="absolute inset-0 bg-dots-pattern opacity-40" />
+              {/* Dynamic Inspection Canvas */}
+              <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-slate-950 border border-slate-800">
+                <svg className="w-full h-full opacity-40" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <pattern id="hero-grid" width="30" height="30" patternUnits="userSpaceOnUse">
+                      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(0,229,199,0.15)" strokeWidth="1" />
+                    </pattern>
+                  </defs>
+                  <rect width="100%" height="100%" fill="url(#hero-grid)" />
+                  <circle cx="50%" cy="50%" r="35%" fill="none" stroke="rgba(0,229,199,0.1)" strokeWidth="1" strokeDasharray="4 4" />
+                </svg>
 
-                {/* Simulated Urban Asset Graphic (CSS Illustration of Bridge / Road / Transformer) */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-30">
-                  <svg className="w-full h-full text-slate-700" viewBox="0 0 400 300" fill="none">
-                    <path d="M20 280 L380 280 M40 280 L120 100 L280 100 L360 280" stroke="currentColor" strokeWidth="3" strokeDasharray="6 6" />
-                    <path d="M120 100 L120 280 M280 100 L280 280" stroke="currentColor" strokeWidth="4" />
-                    <circle cx="200" cy="190" r="45" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" />
-                    <path d="M80 220 L320 220" stroke="currentColor" strokeWidth="2" />
-                  </svg>
-                </div>
-
-                {/* Animated Laser Scanning Line */}
-                <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_15px_#00E5C7] animate-scanline z-10" />
-
-                {/* Animated Bounding Boxes Loop */}
-                {SCAN_DEFECTS.map((defect, index) => {
-                  const isActive = index === activeDefectIndex;
-                  return (
-                    <motion.div
-                      key={defect.id}
-                      initial={{ opacity: 0 }}
-                      animate={{
-                        opacity: isActive ? 1 : 0.2,
-                        scale: isActive ? 1 : 0.98,
-                      }}
-                      transition={{ duration: 0.5 }}
-                      className={`absolute ${defect.boxStyle} border-2 border-cyan-400 bg-cyan-500/10 transition-all duration-500 z-20 pointer-events-none rounded`}
-                    >
-                      {/* Corner Bracket Hooks */}
-                      <div className="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-cyan-300" />
-                      <div className="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-cyan-300" />
-                      <div className="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-cyan-300" />
-                      <div className="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-cyan-300" />
-
-                      {/* AI Bounding Label Tag */}
-                      {isActive && (
-                        <div className="absolute -top-8 left-0 bg-slate-900/95 border border-cyan-400 text-cyan-300 text-[10px] font-mono px-2 py-0.5 rounded shadow-lg flex items-center gap-1.5 whitespace-nowrap">
-                          <Scan className="w-3 h-3 animate-spin text-cyan-400" />
-                          <span>{defect.title}</span>
-                          <span className="bg-cyan-500/30 text-cyan-200 px-1 rounded">{defect.confidence}</span>
-                        </div>
-                      )}
-                    </motion.div>
-                  );
-                })}
-
-                {/* Live Inspection Stats Banner overlay */}
-                <div className="absolute bottom-3 left-3 right-3 bg-slate-900/90 backdrop-blur-md border border-slate-700/80 p-3 rounded-lg z-30">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <div className="flex items-center gap-2">
-                      <AlertTriangle className={`w-4 h-4 ${activeDefect.risk.startsWith('9') ? 'text-red-400 animate-bounce' : 'text-amber-400'}`} />
-                      <span className="text-xs font-bold text-white font-mono">{activeDefect.title}</span>
-                    </div>
-                    <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${activeDefect.badgeColor}`}>
-                      SEVERITY: {activeDefect.risk}
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-2 text-[11px] font-mono text-slate-300 pt-1 border-t border-slate-800">
-                    <div>
-                      <span className="text-slate-500 block text-[9px]">ASSET TYPE</span>
-                      <span className="text-white truncate block">{activeDefect.type}</span>
-                    </div>
-                    <div>
-                      <span className="text-slate-500 block text-[9px]">CONFIDENCE</span>
-                      <span className="text-cyan-300 block">{activeDefect.confidence}</span>
-                    </div>
-                    <div>
-                      <span className="text-slate-500 block text-[9px]">FAILURE WINDOW</span>
-                      <span className="text-red-400 font-bold block">{activeDefect.timeToFailure}</span>
-                    </div>
+                <div className="absolute inset-0 flex items-center justify-center opacity-30 pointer-events-none">
+                  <div className="w-48 h-48 border border-cyan-500/20 rounded-full flex items-center justify-center">
+                    <div className="w-32 h-32 border border-cyan-400/30 rounded-full" />
                   </div>
                 </div>
-              </div>
 
-              {/* Selector Tabs beneath scanning frame */}
-              <div className="grid grid-cols-3 gap-2 mt-3">
-                {SCAN_DEFECTS.map((defect, idx) => (
-                  <button
-                    key={defect.id}
-                    onClick={() => setActiveDefectIndex(idx)}
-                    className={`py-1.5 px-2 rounded text-[11px] font-mono text-center transition-all cursor-pointer ${
-                      activeDefectIndex === idx
-                        ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-semibold'
-                        : 'bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800'
-                    }`}
-                  >
-                    Sample #{idx + 1}
-                  </button>
-                ))}
+                <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_15px_#00E5C7] animate-scanline" />
+
+                {/* Animated Bounding Box Overlay */}
+                <div
+                  className={`absolute ${activeDefect.boxStyle} border-2 border-cyan-400 bg-cyan-500/10 rounded transition-all duration-700 shadow-[0_0_20px_rgba(0,229,199,0.4)] z-20`}
+                >
+                  <div className="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-cyan-300" />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-cyan-300" />
+                  <div className="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-cyan-300" />
+                  <div className="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-cyan-300" />
+
+                  <div className="absolute -top-7 left-0 bg-slate-900/90 border border-cyan-400 text-cyan-300 text-[10px] font-mono px-2 py-0.5 rounded shadow-lg flex items-center gap-1.5 whitespace-nowrap">
+                    <Scan className="w-3 h-3 animate-spin text-cyan-400" />
+                    <span>{activeDefect.title}</span>
+                    <span className="text-white font-bold bg-cyan-500/30 px-1 rounded">{activeDefect.confidence}</span>
+                  </div>
+                </div>
+
+                {/* Telemetry Tooltip */}
+                <div className="absolute bottom-3 left-3 right-3 bg-slate-900/90 border border-slate-800 p-2.5 rounded-lg text-xs font-mono backdrop-blur-md flex items-center justify-between text-slate-300">
+                  <div>
+                    <span className="text-[10px] text-slate-500 block">ASSET CLASS</span>
+                    <span className="text-white font-semibold">{activeDefect.type}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-500 block">RISK SCORE</span>
+                    <span className="text-red-400 font-bold">{activeDefect.risk}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-500 block">TIME TO FAILURE</span>
+                    <span className="text-amber-400 font-bold">{activeDefect.timeToFailure}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </motion.div>

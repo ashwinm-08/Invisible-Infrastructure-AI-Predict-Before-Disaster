@@ -1,4 +1,6 @@
 import React from 'react';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
+import { LanguageProvider } from './context/LanguageContext';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Problem } from './components/Problem';
@@ -14,9 +16,13 @@ import { Team } from './components/Team';
 import { CTASection } from './components/CTASection';
 import { Footer } from './components/Footer';
 
-export const App: React.FC = () => {
+const AppContent: React.FC = () => {
+  const { theme } = useTheme();
+
   return (
-    <div className="min-h-screen bg-[#0A0E14] text-slate-100 selection:bg-cyan-500/30 selection:text-cyan-300 relative overflow-x-hidden">
+    <div className={`min-h-screen transition-colors duration-300 selection:bg-cyan-500/30 selection:text-cyan-300 relative overflow-x-hidden ${
+      theme === 'dark' ? 'bg-[#0A0E14] text-slate-100' : 'bg-slate-50 text-slate-900'
+    }`}>
       <Navbar />
       <main>
         <Hero />
@@ -34,6 +40,16 @@ export const App: React.FC = () => {
       </main>
       <Footer />
     </div>
+  );
+};
+
+export const App: React.FC = () => {
+  return (
+    <ThemeProvider>
+      <LanguageProvider>
+        <AppContent />
+      </LanguageProvider>
+    </ThemeProvider>
   );
 };
 
