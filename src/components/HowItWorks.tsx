@@ -10,6 +10,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
 
 const PIPELINE_STEPS = [
   {
@@ -61,129 +62,116 @@ const PIPELINE_STEPS = [
     step: 6,
     title: 'Report',
     icon: FileCheck2,
-    shortDesc: 'Automated Dispatch Order',
-    fullDesc: 'A structured work-order PDF is routed directly to the ward engineer and repair crew dashboard with 1-click dispatch.',
-    techTag: 'Municipal ERP API Bridge',
+    shortDesc: 'Automated Municipal Work Order',
+    fullDesc: 'System routes auto-generated PDF work orders to ward engineers with exact GPS, severity ranking, and recommended repairs.',
+    techTag: 'Municipal ERP API',
     accent: 'text-emerald-400 border-emerald-500/40 bg-emerald-500/10',
   },
 ];
 
 export const HowItWorks: React.FC = () => {
   const { theme } = useTheme();
-  const [activeStep, setActiveStep] = useState(0);
+  const { t } = useLanguage();
+  const [activeStep, setActiveStep] = useState<number>(1);
+
+  const activeStepData = PIPELINE_STEPS.find((s) => s.step === activeStep) || PIPELINE_STEPS[0];
+  const IconComponent = activeStepData.icon;
 
   return (
     <section id="how-it-works" className={`py-24 relative border-t transition-colors ${
       theme === 'dark' ? 'bg-[#0A0E14] border-slate-800/80 text-slate-100' : 'bg-slate-100 border-slate-200 text-slate-900'
     }`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-12">
         
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+        <div className="text-center max-w-3xl mx-auto space-y-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-widest font-semibold">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>End-to-End Intelligence Pipeline</span>
+            <span>6-STAGE AI PIPELINE</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
             How Invisible Infrastructure <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-amber-300">
-              Predicts Disasters.
+              Predicts Structural Failures.
             </span>
           </h2>
 
           <p className={`${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} text-base sm:text-lg`}>
-            A 6-stage automated intelligence flow from raw smartphone photo capture to municipal work-order dispatch.
+            A end-to-end computer vision and predictive ML pipeline converting raw photos into preventive municipal repair orders.
           </p>
         </div>
 
-        {/* Interactive 6-Step Pipeline Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
-          {/* Step Selector List (5 cols) */}
-          <div className="lg:col-span-5 space-y-3">
-            {PIPELINE_STEPS.map((item, index) => {
-              const IconComp = item.icon;
-              const isSelected = activeStep === index;
-
-              return (
-                <button
-                  key={item.step}
-                  onClick={() => setActiveStep(index)}
-                  className={`w-full text-left p-4 rounded-xl border transition-all duration-300 flex items-center justify-between cursor-pointer ${
-                    isSelected
-                      ? 'border-cyan-400 bg-cyan-500/10 shadow-lg shadow-cyan-950/20 scale-[1.02]'
-                      : theme === 'dark'
-                      ? 'border-slate-800 bg-slate-900/60 hover:bg-slate-800/80 text-slate-300'
-                      : 'border-slate-200 bg-white hover:bg-slate-50 text-slate-700 shadow-sm'
-                  }`}
-                >
-                  <div className="flex items-center gap-3.5">
-                    <div className={`w-9 h-9 rounded-lg border flex items-center justify-center font-mono font-bold text-xs ${item.accent}`}>
-                      0{item.step}
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-base tracking-tight">
-                        {item.title}
-                      </h4>
-                      <p className="text-xs font-mono text-slate-400">
-                        {item.shortDesc}
-                      </p>
-                    </div>
-                  </div>
-
-                  <IconComp className={`w-5 h-5 ${isSelected ? 'text-cyan-400 animate-pulse' : 'text-slate-400'}`} />
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Active Step Deep Dive Card (7 cols) */}
-          <div className="lg:col-span-7">
-            <motion.div
-              key={activeStep}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4 }}
-              className={`glass-panel rounded-2xl p-8 border space-y-6 relative overflow-hidden min-h-[380px] flex flex-col justify-between ${
-                theme === 'dark' ? 'border-cyan-500/40 bg-slate-900/90 shadow-2xl' : 'border-cyan-500/30 bg-white shadow-xl'
-              }`}
-            >
-              <div className="space-y-4">
+        {/* Pipeline Stepper Selector Bar */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          {PIPELINE_STEPS.map((step) => {
+            const StepIcon = step.icon;
+            const isActive = activeStep === step.step;
+            return (
+              <button
+                key={step.step}
+                onClick={() => setActiveStep(step.step)}
+                className={`p-4 rounded-xl border text-left transition-all duration-300 cursor-pointer flex flex-col justify-between min-h-[110px] ${
+                  isActive
+                    ? 'border-cyan-400 bg-cyan-500/15 shadow-lg shadow-cyan-950/40 scale-[1.02]'
+                    : theme === 'dark'
+                    ? 'border-slate-800 bg-slate-900/60 hover:border-slate-700'
+                    : 'border-slate-200 bg-white hover:border-slate-300 shadow-sm'
+                }`}
+              >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 font-bold uppercase">
-                    STAGE 0{PIPELINE_STEPS[activeStep].step} OF 06
+                  <span className={`text-xs font-mono font-bold ${isActive ? 'text-cyan-400' : 'text-slate-400'}`}>
+                    0{step.step}
                   </span>
-                  <span className="text-xs font-mono text-slate-400 border border-slate-700/60 px-2.5 py-0.5 rounded">
-                    {PIPELINE_STEPS[activeStep].techTag}
+                  <StepIcon className={`w-4 h-4 ${isActive ? 'text-cyan-400' : 'text-slate-400'}`} />
+                </div>
+
+                <div>
+                  <h4 className={`text-sm font-bold tracking-tight ${isActive ? 'text-white' : theme === 'dark' ? 'text-slate-200' : 'text-slate-800'}`}>
+                    {step.title}
+                  </h4>
+                  <span className="text-[10px] font-mono text-slate-400 block truncate mt-0.5">
+                    {step.shortDesc}
                   </span>
                 </div>
+              </button>
+            );
+          })}
+        </div>
 
-                <h3 className="text-3xl font-extrabold tracking-tight">
-                  {PIPELINE_STEPS[activeStep].title}: {PIPELINE_STEPS[activeStep].shortDesc}
-                </h3>
+        {/* Selected Stage Detail Showcase Card */}
+        <motion.div
+          key={activeStepData.step}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className={`glass-panel rounded-2xl p-8 border grid grid-cols-1 lg:grid-cols-12 gap-8 items-center ${
+            theme === 'dark' ? 'border-cyan-500/30 bg-slate-900/90 glow-cyan' : 'border-cyan-500/30 bg-white shadow-xl'
+          }`}
+        >
+          <div className="lg:col-span-7 space-y-4">
+            <div className="flex items-center gap-3">
+              <span className="text-xs font-mono px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 font-bold">
+                STAGE 0{activeStepData.step} OF 06
+              </span>
+              <span className="text-xs font-mono text-cyan-400 font-semibold">{activeStepData.techTag}</span>
+            </div>
 
-                <p className={`${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} text-base leading-relaxed`}>
-                  {PIPELINE_STEPS[activeStep].fullDesc}
-                </p>
-              </div>
+            <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+              {activeStepData.title}: {activeStepData.shortDesc}
+            </h3>
 
-              {/* Technical Indicator Footer */}
-              <div className={`pt-6 border-t flex flex-wrap items-center justify-between gap-4 text-xs font-mono ${
-                theme === 'dark' ? 'border-slate-800 text-slate-400' : 'border-slate-200 text-slate-500'
-              }`}>
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-                  <span>Pipeline Latency: &lt; 250ms</span>
-                </div>
-                <div className="text-cyan-400 font-semibold">
-                  CORTEXA PIPELINE ENGINE v3.8
-                </div>
-              </div>
-            </motion.div>
+            <p className={`${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} text-base leading-relaxed`}>
+              {activeStepData.fullDesc}
+            </p>
           </div>
 
-        </div>
+          <div className="lg:col-span-5 flex justify-center">
+            <div className={`w-32 h-32 sm:w-40 sm:h-40 rounded-3xl border flex items-center justify-center ${activeStepData.accent} shadow-2xl`}>
+              <IconComponent className="w-16 h-16 sm:w-20 sm:h-20 animate-pulse" />
+            </div>
+          </div>
+        </motion.div>
 
       </div>
     </section>
