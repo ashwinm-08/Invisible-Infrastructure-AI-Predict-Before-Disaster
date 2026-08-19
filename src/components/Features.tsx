@@ -10,6 +10,7 @@ import {
   Zap 
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
 
 const FEATURES = [
   {
@@ -52,6 +53,7 @@ const FEATURES = [
 
 export const Features: React.FC = () => {
   const { theme } = useTheme();
+  const { t } = useLanguage();
 
   return (
     <section id="features" className={`py-24 relative border-t transition-colors ${
@@ -63,18 +65,18 @@ export const Features: React.FC = () => {
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-widest font-semibold">
             <Zap className="w-3.5 h-3.5" />
-            <span>Platform Capabilities</span>
+            <span>{t('feat_tag')}</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
-            Built for civic impact. <br />
+            {t('feat_title1')} <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-amber-300">
-              Powered by deep AI.
+              {t('feat_title2')}
             </span>
           </h2>
 
           <p className={`${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} text-base sm:text-lg`}>
-            Everything city officials and citizens need to convert raw visual data into preventive infrastructure maintenance.
+            {t('feat_desc')}
           </p>
         </div>
 

@@ -10,6 +10,7 @@ import {
   Server
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
 
 const LAYERS = [
   {
@@ -66,6 +67,7 @@ const LAYERS = [
 
 export const Architecture: React.FC = () => {
   const { theme } = useTheme();
+  const { t } = useLanguage();
 
   return (
     <section id="architecture" className={`py-24 relative border-t transition-colors ${
@@ -77,18 +79,18 @@ export const Architecture: React.FC = () => {
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-widest font-semibold">
             <Server className="w-3.5 h-3.5" />
-            <span>Technical Architecture</span>
+            <span>{t('arch_tag')}</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
-            5-Layer Deep Tech <br />
+            {t('arch_title1')} <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-amber-300">
-              System Design.
+              {t('arch_title2')}
             </span>
           </h2>
 
           <p className={`${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} text-base sm:text-lg`}>
-            From raw camera frames to enterprise spatial clustering and automated municipal ERP dispatches.
+            {t('arch_desc')}
           </p>
         </div>
 

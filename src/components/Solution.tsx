@@ -3,30 +3,29 @@ import { motion } from 'framer-motion';
 import { Camera, Cpu, MapPin, ArrowRight, CheckCircle } from 'lucide-react';
 import { CountUp } from './CountUp';
 import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
 
 export const Solution: React.FC = () => {
   const { theme } = useTheme();
+  const { t } = useLanguage();
 
   return (
     <section id="solution" className={`py-24 relative overflow-hidden border-t transition-colors ${
       theme === 'dark' ? 'bg-[#0D1117] border-slate-800/80 text-slate-100' : 'bg-slate-50 border-slate-200 text-slate-900'
     }`}>
-      {/* Subtle Glow Background */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-cyan-500/5 rounded-full blur-[140px] pointer-events-none" />
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-widest font-semibold">
             <CheckCircle className="w-3.5 h-3.5" />
-            <span>The Cortexa AI Solution</span>
+            <span>{t('sol_tag')}</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
-            Point your phone. <br />
+            {t('sol_title1')} <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-300">
-              AI does the inspection.
+              {t('sol_title2')}
             </span>
           </h2>
         </div>
@@ -34,7 +33,6 @@ export const Solution: React.FC = () => {
         {/* 3-Step Visual Flow Cards */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative">
           
-          {/* Connecting Arrow lines for desktop */}
           <div className="hidden lg:block absolute top-1/2 left-[30%] -translate-y-1/2 z-0">
             <ArrowRight className="w-8 h-8 text-cyan-500/40 animate-pulse" />
           </div>
@@ -63,11 +61,11 @@ export const Solution: React.FC = () => {
               </div>
 
               <h3 className="text-2xl font-bold tracking-tight">
-                Capture
+                {t('sol_step1')}
               </h3>
 
               <p className={`${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} text-sm leading-relaxed`}>
-                Citizen or municipal worker snaps a photo of a road, pole, bridge, or transformer on any smartphone.
+                {t('sol_step1_desc')}
               </p>
             </div>
 
@@ -98,11 +96,11 @@ export const Solution: React.FC = () => {
               </div>
 
               <h3 className="text-2xl font-bold tracking-tight">
-                Analyze & Predict
+                {t('sol_step2')}
               </h3>
 
               <p className={`${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} text-sm leading-relaxed`}>
-                Computer vision detects defect type, scores severity 0–10, and calculates a predicted lead-time until total breakdown.
+                {t('sol_step2_desc')}
               </p>
             </div>
 
@@ -133,11 +131,11 @@ export const Solution: React.FC = () => {
               </div>
 
               <h3 className="text-2xl font-bold tracking-tight">
-                Prioritize & Fix
+                {t('sol_step3')}
               </h3>
 
               <p className={`${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} text-sm leading-relaxed`}>
-                Defect is pinned to the city Health Map. Municipal teams receive auto-generated dispatches BEFORE an accident happens.
+                {t('sol_step3_desc')}
               </p>
             </div>
 

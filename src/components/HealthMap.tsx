@@ -18,6 +18,8 @@ import { CountUp } from './CountUp';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from 'recharts';
 import { useTheme } from '../context/ThemeContext';
 
+import { useLanguage } from '../context/LanguageContext';
+
 export interface DefectMarker {
   id: string;
   title: string;
@@ -149,6 +151,7 @@ const CHART_DATA = [
 
 export const HealthMap: React.FC = () => {
   const { theme } = useTheme();
+  const { t } = useLanguage();
   const [filter, setFilter] = useState<'all' | 'critical' | 'high' | 'stable'>('all');
   const [selectedPin, setSelectedPin] = useState<DefectMarker | null>(MOCK_DEFECTS[0]);
 

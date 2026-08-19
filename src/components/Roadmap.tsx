@@ -1,6 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Flag, CheckCircle2, Clock, Zap, Rocket } from 'lucide-react';
+import { CheckCircle2, Rocket } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
 
 const ROADMAP_PHASES = [
   {
@@ -46,31 +48,35 @@ const ROADMAP_PHASES = [
 ];
 
 export const Roadmap: React.FC = () => {
+  const { theme } = useTheme();
+  const { t } = useLanguage();
+
   return (
-    <section id="roadmap" className="py-24 bg-[#0A0E14] relative border-t border-slate-800/60 overflow-hidden">
+    <section id="roadmap" className={`py-24 relative border-t overflow-hidden transition-colors ${
+      theme === 'dark' ? 'bg-[#0A0E14] border-slate-800/60 text-slate-100' : 'bg-slate-100 border-slate-200 text-slate-900'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono uppercase tracking-widest">
-            <Rocket className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Product Growth Strategy</span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-widest font-semibold">
+            <Rocket className="w-3.5 h-3.5" />
+            <span>{t('road_tag')}</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-            All 4 Phases Fully <br />
+          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
+            {t('road_title1')} <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-300">
-              Completed & Operational.
+              {t('road_title2')}
             </span>
           </h2>
-          <p className="text-slate-300 text-base">
-            From initial MVP model training to full city-scale municipal ERP integration.
+          <p className={`${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} text-base`}>
+            {t('road_desc')}
           </p>
         </div>
 
-        {/* 4-Phase Connected Timeline (Desktop Horizontal / Mobile Vertical) */}
+        {/* 4-Phase Connected Timeline */}
         <div className="relative">
-          {/* Connecting Line for desktop */}
           <div className="hidden lg:block absolute top-[44px] left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-cyan-400 via-teal-400 to-emerald-400 z-0" />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
@@ -81,42 +87,39 @@ export const Roadmap: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.12 }}
-                className="glass-panel rounded-2xl p-6 border flex flex-col justify-between relative group border-cyan-400/60 shadow-xl shadow-cyan-950/40 bg-slate-900/90 hover:border-cyan-300 transition-all duration-300"
+                className={`glass-panel rounded-2xl p-6 border flex flex-col justify-between relative group transition-all duration-300 ${
+                  theme === 'dark'
+                    ? 'border-cyan-400/60 shadow-xl bg-slate-900/90'
+                    : 'border-cyan-500/40 bg-white shadow-lg'
+                }`}
               >
                 <div className="space-y-4">
-                  {/* Top Phase Node & Status Tag */}
                   <div className="flex items-center justify-between">
-                    <div
-                      className="w-10 h-10 rounded-full font-mono font-bold text-sm flex items-center justify-center border-2 bg-cyan-500 text-slate-950 border-cyan-300 glow-cyan"
-                    >
+                    <div className="w-10 h-10 rounded-full font-mono font-bold text-sm flex items-center justify-center border-2 bg-cyan-500 text-slate-950 border-cyan-300 glow-cyan">
                       P{item.phase}
                     </div>
 
-                    <span
-                      className="text-[10px] font-mono px-2.5 py-1 rounded-full border bg-cyan-500/20 text-cyan-300 border-cyan-500/40 font-bold"
-                    >
+                    <span className="text-[10px] font-mono px-2.5 py-1 rounded-full border bg-cyan-500/20 text-cyan-400 border-cyan-500/40 font-bold">
                       {item.status}
                     </span>
                   </div>
 
-                  {/* Title & Timeline */}
                   <div>
                     <span className="text-xs font-mono text-cyan-400 font-semibold block">{item.timeline}</span>
-                    <h3 className="text-2xl font-bold text-white tracking-tight">
+                    <h3 className="text-2xl font-bold tracking-tight">
                       Phase {item.phase}: {item.name}
                     </h3>
                   </div>
 
-                  <p className="text-slate-300 text-xs leading-relaxed">
+                  <p className={`${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} text-xs leading-relaxed`}>
                     {item.description}
                   </p>
                 </div>
 
-                {/* Deliverables List */}
-                <div className="mt-6 pt-4 border-t border-slate-800/80 space-y-1.5">
-                  <span className="text-[10px] font-mono text-slate-500 uppercase tracking-wider block">Key Milestones Achieved:</span>
+                <div className={`mt-6 pt-4 border-t space-y-1.5 ${theme === 'dark' ? 'border-slate-800' : 'border-slate-200'}`}>
+                  <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-semibold">Key Milestones:</span>
                   {item.deliverables.map((deliv) => (
-                    <div key={deliv} className="flex items-center gap-2 text-xs text-slate-200">
+                    <div key={deliv} className={`flex items-center gap-2 text-xs ${theme === 'dark' ? 'text-slate-200' : 'text-slate-700'}`}>
                       <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
                       <span>{deliv}</span>
                     </div>

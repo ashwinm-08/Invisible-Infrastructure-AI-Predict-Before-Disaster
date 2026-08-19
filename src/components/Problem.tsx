@@ -2,36 +2,38 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { AlertOctagon, TrendingUp, EyeOff, XCircle } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
-
-const PROBLEMS = [
-  {
-    icon: AlertOctagon,
-    title: 'Reactive, not predictive',
-    description: 'Defects are logged only after someone reports them or an accident occurs.',
-    accentColor: 'text-red-400 border-red-500/30 bg-red-500/10',
-    stat: '92%',
-    statLabel: 'of city repairs start from citizen complaints',
-  },
-  {
-    icon: TrendingUp,
-    title: 'Costly emergency fixes',
-    description: 'Emergency repairs cost far more than scheduled preventive maintenance.',
-    accentColor: 'text-amber-400 border-amber-500/30 bg-amber-500/10',
-    stat: '4.5x',
-    statLabel: 'higher cost for emergency vs scheduled fixes',
-  },
-  {
-    icon: EyeOff,
-    title: 'No early warning',
-    description: 'Small cracks and tilts silently worsen for months before anyone notices.',
-    accentColor: 'text-orange-400 border-orange-500/30 bg-orange-500/10',
-    stat: '6+ Mo',
-    statLabel: 'unnoticed degradation before catastrophic failure',
-  },
-];
+import { useLanguage } from '../context/LanguageContext';
 
 export const Problem: React.FC = () => {
   const { theme } = useTheme();
+  const { t } = useLanguage();
+
+  const PROBLEMS = [
+    {
+      icon: AlertOctagon,
+      title: t('prob_title1') ? 'Reactive, not predictive' : 'Reactive, not predictive',
+      description: 'Defects are logged only after someone reports them or an accident occurs.',
+      accentColor: 'text-red-400 border-red-500/30 bg-red-500/10',
+      stat: '92%',
+      statLabel: 'of city repairs start from citizen complaints',
+    },
+    {
+      icon: TrendingUp,
+      title: 'Costly emergency fixes',
+      description: 'Emergency repairs cost far more than scheduled preventive maintenance.',
+      accentColor: 'text-amber-400 border-amber-500/30 bg-amber-500/10',
+      stat: '4.5x',
+      statLabel: 'higher cost for emergency vs scheduled fixes',
+    },
+    {
+      icon: EyeOff,
+      title: 'No early warning',
+      description: 'Small cracks and tilts silently worsen for months before anyone notices.',
+      accentColor: 'text-orange-400 border-orange-500/30 bg-orange-500/10',
+      stat: '6+ Mo',
+      statLabel: 'unnoticed degradation before catastrophic failure',
+    },
+  ];
 
   return (
     <section id="problem" className={`py-24 relative border-t transition-colors ${
@@ -43,16 +45,16 @@ export const Problem: React.FC = () => {
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-500 text-xs font-mono uppercase tracking-widest font-semibold">
             <XCircle className="w-3.5 h-3.5" />
-            <span>The Status Quo Crisis</span>
+            <span>{t('prob_tag')}</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
-            Cities repair infrastructure <br className="hidden sm:inline" />
-            <span className="text-red-500">only after it fails.</span>
+            {t('prob_title1')} <br className="hidden sm:inline" />
+            <span className="text-red-500">{t('prob_title2')}</span>
           </h2>
 
           <p className={`${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} text-base sm:text-lg leading-relaxed`}>
-            Roads, bridges, poles, drains, and sidewalks are inspected reactively — after a complaint, a breakdown, or an accident. By then, the cost is already human and financial.
+            {t('prob_desc')}
           </p>
         </div>
 
